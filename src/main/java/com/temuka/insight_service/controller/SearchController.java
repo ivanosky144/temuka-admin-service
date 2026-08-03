@@ -6,7 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.temuka.insight_service.dto.response.SearchResponseDTO;
+import com.temuka.insight_service.util.RestResponse;
+import com.temuka.insight_service.dto.response.TypeaheadSearchResponseDTO;
 import com.temuka.insight_service.service.SearchIndexService;
 
 import lombok.RequiredArgsConstructor;
@@ -18,16 +19,18 @@ public class SearchController {
 
     private final SearchIndexService searchIndexService;
 
-    @GetMapping
-    public ResponseEntity<SearchResponseDTO> handleSearch(
-            @RequestParam String q,
-            @RequestParam(required = false) String contextId,
-            @RequestParam(required = false, defaultValue = "all") String type,
-            @RequestParam(required = false, defaultValue = "relevance") String sort,
-            @RequestParam(required = false, defaultValue = "0") int page) {
+    @GetMapping("/suggest")
+    public ResponseEntity<RestResponse<TypeaheadSearchResponseDTO>> handleTypeahead(
+            @RequestParam(required = false, defaultValue = "") String q,
+            @RequestParam(required = false) String contextId) {
 
-        return ResponseEntity.ok(
-            searchIndexService.search(q, type, contextId, sort, page)
-        );
+        TypeaheadSearchResponseDTO suggestions = searchIndexService.getSuggestions(q, contextId);
+
+        RestResponse<TypeaheadSearchResponseDTO> response = RestResponse.<TypeaheadSearchResponseDTO>builder()
+                .message("Search suggestions retrieved successfully")
+                .data(suggestions)
+                .build();
+
+        return ResponseEntity.ok(response);
     }
 }

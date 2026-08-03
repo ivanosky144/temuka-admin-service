@@ -1,13 +1,16 @@
 package com.temuka.insight_service.entity;
 
 import java.time.Instant;
-import java.util.Map;
-
-import lombok.*;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.TextScore;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
@@ -33,5 +36,10 @@ public class SearchIndex {
 
     private double scoreMultiplier;
 
-    private Map<String, Object> previewMetaData;
+    private String icon;
+
+    private String slug;
+
+    @TextScore
+    private Float textScore;
 }

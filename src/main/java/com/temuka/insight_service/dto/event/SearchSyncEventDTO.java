@@ -17,7 +17,7 @@ public class SearchSyncEventDTO {
 
     private String type;
 
-    @JsonProperty("entityId")
+    @JsonProperty("entity_id")
     private String entityId;
 
     private Map<String, Object> data;

@@ -1,40 +1,25 @@
 package com.temuka.insight_service.config;
 
-import co.elastic.clients.elasticsearch.ElasticsearchClient;
-import co.elastic.clients.transport.rest_client.RestClientTransport;
-import co.elastic.clients.json.jackson.JacksonJsonpMapper;
-import org.elasticsearch.client.RestClient;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.elasticsearch.client.ClientConfiguration;
+import org.springframework.data.elasticsearch.client.elc.ElasticsearchConfiguration;
+import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 
 @Configuration
-public class ElasticConfig {
+@EnableElasticsearchRepositories(basePackages = "com.temuka.insight_service.repository")
+public class ElasticConfig extends ElasticsearchConfiguration {
 
-    @Value("${elasticsearch.host}")
+    @Value("${elasticsearch.host:localhost}")
     private String elasticsearchHost;
 
-    @Value("${elasticsearch.port}")
+    @Value("${elasticsearch.port:9200}")
     private int elasticsearchPort;
 
-    @Bean
-    public RestClient restClient() {
-        return RestClient.builder(
-                new org.apache.http.HttpHost(elasticsearchHost, elasticsearchPort, "http")
-        ).setHttpClientConfigCallback(httpClientBuilder ->
-                httpClientBuilder.setDefaultIOReactorConfig(
-                        org.apache.http.impl.nio.reactor.IOReactorConfig.custom()
-                                .setSoKeepAlive(true)
-                                .build()
-                )
-        ).build();
+    @Override
+    public ClientConfiguration clientConfiguration() {
+        return ClientConfiguration.builder()
+                .connectedTo(elasticsearchHost + ":" + elasticsearchPort)
+                .build();
     }
-
-    @Bean
-        public ElasticsearchClient elasticsearchClient(RestClient restClient) {
-                RestClientTransport transport = new RestClientTransport(
-                        restClient, new JacksonJsonpMapper()
-                );
-                return new ElasticsearchClient(transport);
-        }
 }
