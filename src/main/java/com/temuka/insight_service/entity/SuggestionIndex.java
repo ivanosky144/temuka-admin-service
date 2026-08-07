@@ -23,13 +23,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Document(collection = "suggestion_indexes")
 @CompoundIndexes({
-    // Primary query index: search suggestions by category & score
     @CompoundIndex(name = "type_score_idx", def = "{'type': 1, 'scoreMultiplier': -1}"),
     
-    // Context-scoped search index (e.g. searching only within a specific university)
     @CompoundIndex(name = "context_type_score_idx", def = "{'contextId': 1, 'type': 1, 'scoreMultiplier': -1}"),
     
-    // Fast lookup for Kafka/CDC sync handlers
     @CompoundIndex(name = "entity_type_id_unique_idx", def = "{'entityId': 1, 'type': 1}", unique = true)
 })
 public class SuggestionIndex {
