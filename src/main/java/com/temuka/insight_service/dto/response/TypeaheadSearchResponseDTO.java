@@ -47,7 +47,7 @@ public class TypeaheadSearchResponseDTO {
         private String title;
 
         @JsonProperty("Type")
-        private String type; // "community", "major", "university", "user", "post"
+        private String type; 
 
         @JsonProperty("ContextID")
         private String contextId;
@@ -60,5 +60,8 @@ public class TypeaheadSearchResponseDTO {
 
         @JsonProperty("Slug")
         private String slug;
+
+        @JsonProperty("Metadata")
+        private Map<String, Object> metadata;
     }
 }

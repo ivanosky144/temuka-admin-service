@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.temuka.insight_service.util.RestResponse;
 import com.temuka.insight_service.dto.response.TypeaheadSearchResponseDTO;
-import com.temuka.insight_service.service.SearchIndexService;
+import com.temuka.insight_service.service.SuggestionIndexService;
+import com.temuka.insight_service.util.RestResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,14 +17,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SearchController {
 
-    private final SearchIndexService searchIndexService;
+    private final SuggestionIndexService suggestionIndexService;
 
     @GetMapping("/suggest")
     public ResponseEntity<RestResponse<TypeaheadSearchResponseDTO>> handleTypeahead(
             @RequestParam(required = false, defaultValue = "") String q,
             @RequestParam(required = false) String contextId) {
 
-        TypeaheadSearchResponseDTO suggestions = searchIndexService.getSuggestions(q, contextId);
+        TypeaheadSearchResponseDTO suggestions = suggestionIndexService.getSuggestions(q, contextId);
 
         RestResponse<TypeaheadSearchResponseDTO> response = RestResponse.<TypeaheadSearchResponseDTO>builder()
                 .message("Search suggestions retrieved successfully")

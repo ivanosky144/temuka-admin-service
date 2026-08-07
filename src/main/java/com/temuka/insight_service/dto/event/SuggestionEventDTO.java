@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SearchSyncEventDTO {
+public class SuggestionEventDTO {
 
     private String operation;
 
