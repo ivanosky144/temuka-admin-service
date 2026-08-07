@@ -3,12 +3,14 @@ package com.temuka.insight_service.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.temuka.insight_service.dto.response.SearchHistoryResponseDTO;
 import com.temuka.insight_service.dto.response.SearchSuggestResponseDTO;
+import com.temuka.insight_service.entity.SearchHistory;
 import com.temuka.insight_service.service.SearchHistoryService;
 import com.temuka.insight_service.service.SuggestionIndexService;
 import com.temuka.insight_service.util.RestResponse;
@@ -33,6 +35,23 @@ public class SearchController {
         RestResponse<SearchSuggestResponseDTO> response = RestResponse.<SearchSuggestResponseDTO>builder()
                 .message("Search suggestions retrieved successfully")
                 .data(suggestions)
+                .build();
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/click")
+    public ResponseEntity<RestResponse<Void>> recordSearchClick(
+            @RequestParam String userId,
+            @RequestParam String query,
+            @RequestParam(required = false) String entityId,
+            @RequestParam(required = false) SearchHistory.EntityType entityType,
+            @RequestParam(required = false) String slug) {
+
+        searchHistoryService.saveSearchClick(userId, query, entityId, entityType, slug);
+
+        RestResponse<Void> response = RestResponse.<Void>builder()
+                .message("Search click recorded successfully")
                 .build();
 
         return ResponseEntity.ok(response);

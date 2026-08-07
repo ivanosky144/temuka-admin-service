@@ -20,7 +20,7 @@ public class SearchHistoryService {
 
     private final SearchHistoryRepository repository;
 
-    public void saveSearchQuery(String userId, String query) {
+    public void saveSearchClick(String userId, String query, String entityId, SearchHistory.EntityType entityType, String slug) {
         if (userId == null || query == null || query.trim().isEmpty()) {
             return;
         }
@@ -32,12 +32,14 @@ public class SearchHistoryService {
         SearchHistory history = SearchHistory.builder()
                 .userId(userId)
                 .query(cleanQuery)
+                .entityId(entityId)
+                .entityType(entityType)
+                .slug(slug)
                 .searchedAt(Instant.now())
                 .build();
 
         repository.save(history);
     }
-
     public SearchHistoryResponseDTO getUserHistory(String userId, int limit) {
         if (userId == null) {
             return SearchHistoryResponseDTO.builder()
