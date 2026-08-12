@@ -25,7 +25,7 @@ public class SearchController {
     private final SuggestionIndexService suggestionIndexService;
     private final SearchHistoryService searchHistoryService;
 
-    @GetMapping("/suggest")
+    @GetMapping("/suggestions")
     public ResponseEntity<RestResponse<SearchSuggestResponseDTO>> handleTypeahead(
             @RequestParam(required = false, defaultValue = "") String q,
             @RequestParam(required = false) String contextId) {

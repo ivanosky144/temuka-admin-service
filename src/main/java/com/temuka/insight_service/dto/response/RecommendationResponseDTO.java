@@ -3,7 +3,7 @@ package com.temuka.insight_service.dto.response;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.temuka.insight_service.dto.data.SuggestionItem;
+import com.temuka.insight_service.dto.data.SuggestionItemDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,5 +23,5 @@ public class RecommendationResponseDTO {
     private int count;
 
     @JsonProperty("Items")
-    private List<SuggestionItem> items;
+    private List<SuggestionItemDTO> items;
 }

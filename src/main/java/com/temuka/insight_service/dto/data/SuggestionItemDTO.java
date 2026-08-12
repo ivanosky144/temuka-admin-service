@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SuggestionItem {
+public class SuggestionItemDTO {
 
     @JsonProperty("ID")
     private String id;

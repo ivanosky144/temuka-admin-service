@@ -34,10 +34,8 @@ public class SuggestionIndex {
     @Id
     private String id; 
 
-    @Indexed
     private String entityId; 
 
-    @Indexed
     private EntityType type; 
 
     @TextIndexed(weight = 5)
@@ -48,6 +46,11 @@ public class SuggestionIndex {
 
     @Indexed
     private String contextId; 
+
+    private String icon;
+
+    @Indexed(unique = true)
+    private String slug;
 
     private Instant createdAt;
     private Instant updatedAt;

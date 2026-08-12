@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 
 import com.temuka.insight_service.dto.response.SearchSuggestResponseDTO;
 import com.temuka.insight_service.dto.response.RecommendationResponseDTO;
-import com.temuka.insight_service.dto.data.SuggestionItem;
+import com.temuka.insight_service.dto.data.SuggestionItemDTO;
 import com.temuka.insight_service.entity.SuggestionIndex;
 import com.temuka.insight_service.entity.SuggestionIndex.EntityType;
 
@@ -37,11 +37,11 @@ public class SuggestionIndexService {
         String cleanQuery = q.trim();
         Pattern searchPattern = Pattern.compile(Pattern.quote(cleanQuery), Pattern.CASE_INSENSITIVE);
 
-        List<SuggestionItem> communities = fetchCategorySuggestions(EntityType.COMMUNITY, searchPattern, contextId, 5);
-        List<SuggestionItem> majors = fetchCategorySuggestions(EntityType.MAJOR, searchPattern, contextId, 3);
-        List<SuggestionItem> universities = fetchCategorySuggestions(EntityType.UNIVERSITY, searchPattern, contextId, 3);
-        List<SuggestionItem> users = fetchCategorySuggestions(EntityType.USER, searchPattern, contextId, 3);
-        List<SuggestionItem> posts = fetchCategorySuggestions(EntityType.POST, searchPattern, contextId, 5);
+        List<SuggestionItemDTO> communities = fetchCategorySuggestions(EntityType.COMMUNITY, searchPattern, contextId, 5);
+        List<SuggestionItemDTO> majors = fetchCategorySuggestions(EntityType.MAJOR, searchPattern, contextId, 3);
+        List<SuggestionItemDTO> universities = fetchCategorySuggestions(EntityType.UNIVERSITY, searchPattern, contextId, 3);
+        List<SuggestionItemDTO> users = fetchCategorySuggestions(EntityType.USER, searchPattern, contextId, 3);
+        List<SuggestionItemDTO> posts = fetchCategorySuggestions(EntityType.POST, searchPattern, contextId, 5);
 
         return SearchSuggestResponseDTO.builder()
                 .query(cleanQuery)
@@ -64,7 +64,7 @@ public class SuggestionIndexService {
                 .build();
     }
 
-    private List<SuggestionItem> fetchCategorySuggestions(EntityType type, Pattern pattern, String contextId, int limit) {
+    private List<SuggestionItemDTO> fetchCategorySuggestions(EntityType type, Pattern pattern, String contextId, int limit) {
         Query query = new Query();
 
         Criteria criteria = Criteria.where("type").is(type)
@@ -87,7 +87,7 @@ public class SuggestionIndexService {
                 .collect(Collectors.toList());
     }
 
-    private List<SuggestionItem> fetchTopTrending(EntityType type, String contextId, int limit) {
+    private List<SuggestionItemDTO> fetchTopTrending(EntityType type, String contextId, int limit) {
         Query query = new Query();
         Criteria criteria = Criteria.where("type").is(type);
 
@@ -105,7 +105,7 @@ public class SuggestionIndexService {
                 .collect(Collectors.toList());
     }
 
-    private SuggestionItem mapToItem(SuggestionIndex index) {
+    private SuggestionItemDTO mapToItem(SuggestionIndex index) {
         Map<String, Object> meta = index.getMetadata() != null ? index.getMetadata() : Map.of();
 
         String icon = (String) meta.getOrDefault("logo", 
@@ -114,7 +114,7 @@ public class SuggestionIndexService {
 
         String slug = (String) meta.get("slug");
 
-        return SuggestionItem.builder()
+        return SuggestionItemDTO.builder()
                 .id(index.getEntityId()) 
                 .title(index.getTitle())
                 .type(index.getType() != null ? index.getType().name().toLowerCase() : null)
@@ -172,7 +172,7 @@ public class SuggestionIndexService {
     }
 
     public RecommendationResponseDTO getRecommendations(EntityType type, String contextId, int limit) {
-        List<SuggestionItem> items = fetchTopTrending(type, contextId, limit);
+        List<SuggestionItemDTO> items = fetchTopTrending(type, contextId, limit);
         return RecommendationResponseDTO.builder()
             .category(type.name().toLowerCase())
             .count(items.size())

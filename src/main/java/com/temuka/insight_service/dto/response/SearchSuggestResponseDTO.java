@@ -3,7 +3,7 @@ package com.temuka.insight_service.dto.response;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.temuka.insight_service.dto.data.SuggestionItem;
+import com.temuka.insight_service.dto.data.SuggestionItemDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,18 +20,18 @@ public class SearchSuggestResponseDTO {
     private String query;
 
     @JsonProperty("Communities")
-    private List<SuggestionItem> communities;
+    private List<SuggestionItemDTO> communities;
 
     @JsonProperty("Majors")
-    private List<SuggestionItem> majors;
+    private List<SuggestionItemDTO> majors;
 
     @JsonProperty("Universities")
-    private List<SuggestionItem> universities;
+    private List<SuggestionItemDTO> universities;
 
     @JsonProperty("Users")
-    private List<SuggestionItem> users;
+    private List<SuggestionItemDTO> users;
 
     @JsonProperty("Posts")
-    private List<SuggestionItem> posts;
+    private List<SuggestionItemDTO> posts;
 
 }
